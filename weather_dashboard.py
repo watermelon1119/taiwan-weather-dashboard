@@ -16,7 +16,7 @@ if not API_KEY:
 
 # CWA 36 小時天氣預報（一般天氣）
 # 資料集：F-C0032-001（免加 locationName 參數，先抓全部縣市以免中英名稱不對）
-URL = f"http://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={API_KEY}"
+URL = f"https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={API_KEY}"
 
 @st.cache_data(ttl=900)  # 15 分鐘快取
 def fetch_weather():
@@ -110,4 +110,5 @@ st.dataframe(
     .rename(columns={"startTime":"開始時間", "endTime":"結束時間", "weather":"天氣", "minT":"最低溫", "maxT":"最高溫", "pop":"降雨機率(%)"}),
     use_container_width=True
 )
+
 
