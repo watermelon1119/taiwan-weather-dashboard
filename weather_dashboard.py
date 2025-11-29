@@ -5,12 +5,9 @@ import plotly.express as px
 import google.generativeai as genai
 import urllib3
 
-# 忽略 SSL 警告
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# ====================================
-# Streamlit 頁面設定
-# ====================================
+# Streamlit config
 st.set_page_config(
     page_title="台灣氣象 + Gemini AI Dashboard",
     page_icon="⛅",
@@ -20,21 +17,17 @@ st.set_page_config(
 st.title("⛅ 台灣氣象資料 Dashboard（36 小時預報）")
 st.caption("資料來源：中央氣象署 F-C0032-001 / Gemini AI 語意分析")
 
-
-# ====================================
-# 讀取 API 金鑰
-# ====================================
-CWA_API_KEY = st.secrets["CWA_API_KEY"]          # 這是氣象局 API KEY（很重要！）
-GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]    # Gemini API
-
+# =============================
+# 🔑 讀取 Gemini API Key
+# =============================
+GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("models/gemini-1.5-flash")  # 最新版本
+model = genai.GenerativeModel("gemini-1.5-flash")
 
-
-# ====================================
-# 抓中央氣象署天氣資料
-# ====================================
-API_URL = f"https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={CWA_API_KEY}"
+# =============================
+# 📡 氣象局 API（直接寫死）
+# =============================
+API_URL = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWA-44069CF5-90E6-4ABF-8319-A6461633FA16"
 
 @st.cache_data(ttl=900)
 def fetch_cwa_weather():
@@ -156,5 +149,6 @@ try:
 
 except Exception as e:
     st.error(f"AI 分析失敗：{e}")
+
 
 
