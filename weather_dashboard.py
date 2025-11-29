@@ -23,6 +23,7 @@ st.caption("資料來源：中央氣象署 F-C0032-001 / Gemini AI 語意分析"
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-pro")
+response = model.generate_content(prompt)
 
 
 # =============================
