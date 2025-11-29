@@ -32,7 +32,7 @@ model = genai.GenerativeModel("gemini-pro")
 # 📡 抓取中央氣象署 36 小時預報資料
 # =============================
 
-API_URL = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001"
+API_URL = f"https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization={CWA_API_KEY}"
 
 @st.cache_data(ttl=900)  # cache 15 分鐘
 def fetch_cwa_weather():
@@ -158,4 +158,5 @@ if st.button("產生 AI 分析 ✨"):
         st.write(ai_result)
     except Exception as e:
         st.error(f"AI 分析失敗：{e}")
+
 
