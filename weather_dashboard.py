@@ -28,7 +28,7 @@ CWA_API_KEY = st.secrets["CWA_API_KEY"]          # 這是氣象局 API KEY（很
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]    # Gemini API
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-pro")  # 最新版本
+model = genai.GenerativeModel("models/gemini-1.5-flash")  # 最新版本
 
 
 # ====================================
@@ -156,4 +156,5 @@ try:
 
 except Exception as e:
     st.error(f"AI 分析失敗：{e}")
+
 
