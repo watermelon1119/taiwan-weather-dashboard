@@ -92,3 +92,47 @@ try:
     raw = fetch_cwa_weather()
     df = parse_cwa_data(raw)
 except Exception as e:
+    st.error(f"無法取得氣象資料：{e}")
+    st.stop()
+
+cities = sorted(df["city"].unique().tolist())
+sel_city = st.sidebar.selectbox("選擇縣市", cities)
+city_df = df[df["city"] == sel_city].sort_values("startTime")
+
+st.subheader(f"{sel_city} 未來 36 小時天氣趨勢")
+col1, col2 = st.columns(2)
+
+with col1:
+    fig_temp = px.line(city_df, x="startTime", y=["minT", "maxT"], markers=True)
+    st.plotly_chart(fig_temp, use_container_width=True)
+
+with col2:
+    fig_pop = px.bar(city_df, x="startTime", y="pop")
+    st.plotly_chart(fig_pop, use_container_width=True)
+
+st.subheader("📋 天氣數據表格")
+st.dataframe(city_df, use_container_width=True)
+
+# =============================
+# Gemini 生成天氣解讀
+# =============================
+st.subheader("🤖 Gemini AI 天氣說明")
+
+if st.button("產生 AI 天氣分析 ✨"):
+    sample = city_df.iloc[0]
+
+    text_block = (
+        f"城市：{sample['city']}\n"
+        f"時間：{sample['startTime']}~{sample['endTime']}\n"
+        f"天氣：{sample['weather']}\n"
+        f"最高溫：{sample['maxT']}°C\n"
+        f"最低溫：{sample['minT']}°C\n"
+        f"降雨機率：{sample['pop']}%"
+    )
+
+    try:
+        ai_result = gemini_explain_weather(text_block)
+        st.success("Gemini AI 天氣分析：")
+        st.write(ai_result)
+    except Exception as e:
+        st.error(f"AI 生成失敗：{e}")
